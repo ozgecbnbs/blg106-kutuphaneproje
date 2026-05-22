@@ -3,6 +3,7 @@
 Bu oturumda, Dijital Kütüphane uygulaması için Flask 3.x altyapısını ve klasör iskeletini kurmayı hedefledim. Ayrıca sanal ortamı ayarlayıp versiyon kontrol (Git) altyapısını oluşturmak önceliğimdi.
 
 ### Kullandığım Mod ve Model
+Editör: Antigravity
 Mod: Plan 
 Model: Gemini 3 Pro 
 Görünüm: Manager 
@@ -35,6 +36,7 @@ Bir sonraki adımda SQLAlchemy 2.x stili ile veritabanı modellerini oluşturaca
 Bu oturumda, uygulamanın temelini oluşturan veritabanı şemasını tasarlamayı ve SQLAlchemy 2.x standartlarına uygun `User`, `Kitap` ve `Inceleme` modellerini oluşturmayı hedefledim.
 
 ### Kullandığım Mod ve Model
+Editör: Antigravity
 Mod: Plan
 Model: Gemini 3 Pro
 Görünüm: Manager
