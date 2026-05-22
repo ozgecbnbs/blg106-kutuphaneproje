@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import List, Optional
 from werkzeug.security import generate_password_hash, check_password_hash
+# pyrefly: ignore [missing-import]
 from sqlalchemy import String, Integer, Text, ForeignKey, func
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app import db

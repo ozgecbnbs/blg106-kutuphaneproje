@@ -28,3 +28,35 @@ Ajana projeyi hemen hazırlatmak yerine sadece klasör yapısını ve temel şey
 
 ### Sonraki Oturum İçin Notlar
 Bir sonraki adımda SQLAlchemy 2.x stili ile veritabanı modellerini oluşturacağım.
+
+## Oturum 2 - 22 Mayıs 2026
+
+### Hedef
+Bu oturumda, uygulamanın temelini oluşturan veritabanı şemasını tasarlamayı ve SQLAlchemy 2.x standartlarına uygun `User`, `Kitap` ve `Inceleme` modellerini oluşturmayı hedefledim.
+
+### Kullandığım Mod ve Model
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar
+1. "Mevcut projemde app/__init__.py içinde db tanımlı... app/models.py içinde şu modelleri tanımla: User, Kitap, Inceleme... Kısıtlar: Yönerge gereği kesinlikle SQLAlchemy 2.x stilini kullan (Mapped, mapped_column)..."
+
+### Ajanın Önerdiği Plan
+Ajan; User, Kitap ve Inceleme modelleri için primary key, unique alanlar ve otomatik tarih atamalarını içeren eksiksiz bir şema sundu. Ayrıca modeller arasındaki bire-çok (one-to-many) ilişkileri `relationship` ve `back_populates` kullanarak kurguladı. Kodlama öncesinde kısıtlamaların (puan sınırları vb.) veritabanı seviyesinde mi yoksa form validasyonu aşamasında mı çözülmesi gerektiğini sordu.
+
+### Plan'da Sorguladıklarım
+Ajanın kısıtlamalar konusundaki sorusunu değerlendirdim. Hataları daha esnek yakalamak ve kullanıcıya daha temiz hata mesajları gösterebilmek adına kısıtlamaları veritabanı seviyesinde (CheckConstraint) tutmak yerine form doğrulaması (validasyon) aşamasında çözmenin daha kolay ve uygun olacağına karar verdim ve ajana bu yönde onay verdim.
+
+### Üretilen Kodda Düzelttiklerim
+- Kod editörünün hata denetleyicisi sanal ortamı tam olarak algılayamadığı için SQLAlchemy satırlarının altını kırmızı çizdi. Bu görsel uyarıyı susturmak ve kodun okunabilirliğini artırmak için ilgili satırların sonuna manuel olarak `# pyrefly: ignore [missing-import]` yorum satırlarını ekledim.
+
+### Karşılaştığım Hatalar ve Çözümler
+- Hata: Yeni terminal oturumu açıldığında sanal ortamın (`venv`) kapalı olduğunu ve aktifleştirmeye çalışırken tekrar `PSSecurityException` güvenlik engeline takıldığımı gördüm.
+- Çözüm: `Set-ExecutionPolicy Unrestricted -Scope Process` komutuyla PowerShell'e yeniden geçici yetki vererek sanal ortamı (`.\venv\Scripts\activate`) başarıyla ayağa kaldırdım.
+
+### Bu Oturumdan Öğrendiğim
+SQLAlchemy 2.x sürümünün getirdiği modern deklaratif yapıyı (`Mapped` ve `mapped_column`) uygulamalı olarak öğrendim. Veritabanı modelleri arasında ilişkilerin mimari olarak nasıl kurulduğunu ve şifre güvenliği için `werkzeug.security` paketinin (`set_password`, `check_password`) nasıl entegre edildiğini kavradım.
+
+### Sonraki Oturum İçin Notlar
+Modellerimiz hazır. Bir sonraki oturumda Flask-Migrate kullanarak veritabanı migrasyon süreçlerini (flask db init, migrate, upgrade) başlatacağız ve tablolarımızı fiziksel olarak oluşturacağız.
