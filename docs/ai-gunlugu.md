@@ -62,3 +62,32 @@ SQLAlchemy 2.x sürümünün getirdiği modern deklaratif yapıyı (`Mapped` ve 
 
 ### Sonraki Oturum İçin Notlar
 Modellerimiz hazır. Bir sonraki oturumda Flask-Migrate kullanarak veritabanı migrasyon süreçlerini (flask db init, migrate, upgrade) başlatacağız ve tablolarımızı fiziksel olarak oluşturacağız.
+
+## Oturum 3 - 23 Mayıs 2026
+
+### Hedef
+SQLAlchemy ile yazdığımız veritabanı modellerini Flask-Migrate eklentisi kullanarak fiziksel bir SQLite veritabanına (`app.db`) dönüştürmek ve tabloları oluşturmak.
+
+### Kullandığım Mod ve Model
+Editör: Antigravity
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar
+1. "Mevcut bir önceki oturumda SQLAlchemy 2.x ile veritabanı modellerimizi oluşturduk... Hedef: Veritabanı tablolarını fiziksel olarak oluşturmak için Flask-Migrate kurulumunu yap... Kurallar: flask db init, flask db migrate, flask db upgrade komutlarını çalıştır..."
+
+### Ajanın Önerdiği Plan ve Tespitler
+Ajan, projenin ilk oturumunda zaten "factory pattern" mimarisine uygun olarak `migrate.init_app(app, db)` kurulumunun yapılmış olduğunu tespit etti. Bu nedenle kod yapısını bozmadan doğrudan terminal komutlarına geçmeyi önerdi.
+
+### Plan'da Sorguladıklarım / Ajanın Müdahalesi
+Süreç esnasında ajan çok kritik bir teknik detayı fark etti: Modellerimiz `app/models.py` içinde tanımlı olmasına rağmen, uygulamanın ana giriş kapısı olan `app/__init__.py` içinde import edilmemişti. Bu durum Flask-Migrate'in tabloları "görmesini" engelliyordu. Ajan bu eksikliği fark ederek dosyanın altına `from app import models` satırını akıllıca ekledi.
+
+### Karşılaştığım Hatalar ve Çözümler
+- Herhangi bir hata ile karşılaşılmadı. Ajan, eksik olan import satırını kendisi tamamlayarak olası bir "boş veritabanı şeması" hatasının önüne geçmiş oldu. Terminalde sırasıyla `flask db init`, `flask db migrate` ve `flask db upgrade` komutları sorunsuz icra edildi.
+
+### Bu Oturumdan Öğrendiğim
+Flask-Migrate mimarisinin, SQLAlchemy'nin `metadata` yapısını takip ederek çalıştığını ve bu yüzden modellerin uygulamaya import edilmesinin zorunlu olduğunu öğrendim. Ayrıca `__pycache__` klasörünün Python tarafından kodları hızlandırmak amacıyla oluşturulan ve bytecode içeren zararsız bir sistem klasörü olduğunu kavradım.
+
+### Sonraki Oturum İçin Notlar
+Veritabanımız ve tablolarımız fiziksel olarak hazır. Bir sonraki oturumda kullanıcı kayıt (Register) ve giriş (Login) işlemlerini yönetecek olan WTForms yapılarını ve form validasyonlarını kuracağız.
