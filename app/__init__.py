@@ -31,4 +31,7 @@ def create_app(config_class=Config):
     from app.auth import auth as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    # Import models so Flask-Migrate can detect them
+    from app import models
+
     return app
