@@ -21,8 +21,8 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     
     # Configure login manager
-    # login_manager.login_view = 'auth.login'
-    # login_manager.login_message = 'Please log in to access this page.'
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Lütfen bu sayfayı görüntülemek için giriş yapın.'
 
     # Register blueprints
     from app.main import main as main_bp

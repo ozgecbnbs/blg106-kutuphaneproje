@@ -2,13 +2,14 @@ from datetime import datetime
 from typing import List, Optional
 from werkzeug.security import generate_password_hash, check_password_hash
 # pyrefly: ignore [missing-import]
+from flask_login import UserMixin
 from sqlalchemy import String, Integer, Text, ForeignKey, func
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app import db
+from app import db, login_manager
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -60,3 +61,7 @@ class Inceleme(db.Model):
 
     def __repr__(self):
         return f'<Inceleme id={self.id} puan={self.puan} user_id={self.user_id} kitap_id={self.kitap_id}>'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
