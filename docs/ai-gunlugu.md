@@ -91,3 +91,34 @@ Flask-Migrate mimarisinin, SQLAlchemy'nin `metadata` yapısını takip ederek ç
 
 ### Sonraki Oturum İçin Notlar
 Veritabanımız ve tablolarımız fiziksel olarak hazır. Bir sonraki oturumda kullanıcı kayıt (Register) ve giriş (Login) işlemlerini yönetecek olan WTForms yapılarını ve form validasyonlarını kuracağız.
+
+## Oturum 4 - 24 Mayıs 2026
+
+### Hedef
+Kullanıcıların sisteme güvenli bir şekilde üye olabilmesi ve oturum açabilmesi için Flask-Login ve Flask-WTF entegrasyonu ile Auth (Kayıt/Giriş) sistemini kurmak.
+
+### Kullandığım Mod ve Model
+Editör: Antigravity
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar
+1. "Bağlam: Projemde User, Kitap ve Inceleme modelleri hazır... Hedef: Kullanıcı kayıt (Register) ve giriş (Login) sistemini kur... Görevler: app/__init__.py içinde LoginManager'ı kur, forms.py ve routes.py dosyalarını oluştur..."
+2. "Bağlam: app/templates/auth/register.html ve login.html sayfalarımız hazır ve çalışıyor. Hedef: Kullanıcı deneyimini artırmak için şifre alanlarına 'Şifreyi Göster/Gizle' özelliği ekle..."
+
+### Ajanın Önerdiği Plan ve Tespitler
+Ajan, formları ve yönlendirme (route) işlemlerini ana dizine yığmak yerine, çok daha profesyonel bir yaklaşım olan Blueprint mimarisini (modüler yapı) kullanmayı teklif etti. `app/auth/` adında yeni bir klasör oluşturarak tüm giriş/kayıt işlemlerini bu klasör altında toplamayı planladı.
+
+### Plan'da Sorguladıklarım
+Ajanın Blueprint (modüler) yaklaşımı projenin büyümesi ihtimaline karşı çok temiz bir yapı sunduğu için bu mimariyi kullanmasını onayladım. Ayrıca formlar oluştuktan sonra, kullanıcı deneyimini (UX) artırmak adına inisiyatif kullanarak şifre alanlarına "göster/gizle" butonu eklemesini talep ettim.
+
+### Karşılaştığım Hatalar ve Çözümler
+- İlk test aşamasında tarayıcıda `404 Not Found` hatası aldım. Bunun sebebinin ana sayfayı henüz oluşturmamış olmamızdan kaynaklandığını fark ettim ve manuel olarak `/auth/register` rotasına giderek sorunu çözdüm.
+- Şifre göster/gizle butonunu ekletirken dosya kaydetme zamanlamasından ve anlık bağlantı yavaşlamasından dolayı ajan kısa süreli bir takılma yaşadı, ancak işlemi mevcut HTML/Bootstrap yapısını bozmadan (vanilla JS ile) başarıyla tamamladı.
+
+### Bu Oturumdan Öğrendiğim
+Flask'ta modüler yapının (Blueprint) nasıl çalıştığını ve uygulamanın belirli bir parçasının (auth) nasıl izole edildiğini öğrendim. WTForms kullanılarak arka planda (backend) veri doğrulamanın (validation) form güvenliği açısından ne kadar kritik olduğunu kavradım. Ayrıca front-end tarafında küçük JavaScript dokunuşlarının kullanıcı deneyimini nasıl iyileştirdiğini bizzat test etmiş oldum.
+
+### Sonraki Oturum İçin Notlar
+Kullanıcı altyapısı tamamen hazır. Bir sonraki oturumda sisteme giriş yapan kullanıcıların kitap ekleyebileceği, listeleyebileceği ve silebileceği (CRUD) ana işlemlere geçeceğiz.
