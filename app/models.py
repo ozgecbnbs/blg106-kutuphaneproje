@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
 
     # İlişkiler
     incelemeler: Mapped[List["Inceleme"]] = relationship(back_populates="kullanici", cascade="all, delete-orphan")
+    kitaplar: Mapped[List["Kitap"]] = relationship(back_populates="ekleyen", cascade="all, delete-orphan")
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -38,9 +39,11 @@ class Kitap(db.Model):
     yazar: Mapped[str] = mapped_column(String(128), nullable=False)
     yayin_yili: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     eklendigi_tarih: Mapped[datetime] = mapped_column(default=func.now())
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
 
     # İlişkiler
     incelemeler: Mapped[List["Inceleme"]] = relationship(back_populates="kitap", cascade="all, delete-orphan")
+    ekleyen: Mapped["User"] = relationship(back_populates="kitaplar")
 
     def __repr__(self):
         return f'<Kitap {self.baslik} - {self.yazar}>'

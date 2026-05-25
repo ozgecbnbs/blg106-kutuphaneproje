@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Yeni Kitap Ekle - Dijital Kütüphane{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="card-header bg-gradient-success text-white border-0 py-4 text-center">
+                <h3 class="mb-0 fw-bold"><i class="fas fa-book-medical me-2"></i>Yeni Kitap Ekle</h3>
+                <p class="mb-0 mt-2 opacity-75">Kütüphanene yeni bir eser kazandır.</p>
+            </div>
+            
+            <div class="card-body p-4 p-md-5 bg-light">
+                <form method="POST" action="" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-floating mb-4">
+                        {{ form.baslik(class="form-control rounded-3" + (" is-invalid" if form.baslik.errors else ""), placeholder="Kitap Başlığı") }}
+                        {{ form.baslik.label }}
+                        {% if form.baslik.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.baslik.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        {{ form.yazar(class="form-control rounded-3" + (" is-invalid" if form.yazar.errors else ""), placeholder="Yazar Adı") }}
+                        {{ form.yazar.label }}
+                        {% if form.yazar.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.yazar.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        {{ form.yayin_yili(class="form-control rounded-3" + (" is-invalid" if form.yayin_yili.errors else ""), placeholder="Yayın Yılı (İsteğe Bağlı)", type="number", min="1000", max="2100") }}
+                        {{ form.yayin_yili.label }}
+                        {% if form.yayin_yili.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.yayin_yili.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        {{ form.submit(class="btn btn-success btn-lg rounded-pill shadow-sm fw-bold") }}
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('main.index') }}" class="text-decoration-none text-muted">
+                            <i class="fas fa-arrow-left me-1"></i> Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+    }
+    .form-control:focus {
+        border-color: #1cc88a;
+        box-shadow: 0 0 0 0.25rem rgba(28, 200, 138, 0.25);
+    }
+</style>
+{% endblock %}
