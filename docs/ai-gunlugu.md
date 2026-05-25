@@ -122,3 +122,34 @@ Flask'ta modüler yapının (Blueprint) nasıl çalıştığını ve uygulamanı
 
 ### Sonraki Oturum İçin Notlar
 Kullanıcı altyapısı tamamen hazır. Bir sonraki oturumda sisteme giriş yapan kullanıcıların kitap ekleyebileceği, listeleyebileceği ve silebileceği (CRUD) ana işlemlere geçeceğiz.
+
+## Oturum 5 - 25 Mayıs 2026
+
+### Hedef
+Sisteme giriş yapan kullanıcıların kendi kitaplarını ekleyebileceği, listeleyebileceği ve silebileceği (Ana Sayfa / Kitap CRUD) yapıyı kurmak. Ayrıca kitapların hangi kullanıcıya ait olduğunu belirlemek için veritabanı ilişkilerini oluşturmak.
+
+### Kullandığım Mod ve Model
+Editör: Antigravity
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar
+1. "Bağlam: Oturum 4'te Blueprint mimarisi ile Auth sistemini tamamladık. Hedef: Sisteme giriş yapan kullanıcıların kendi kitaplarını ekleyebileceği, listeleyebileceği ve silebileceği (Ana Sayfa / Kitap CRUD) yapıyı kurmak... Rotalar: /, /kitap/ekle, /kitap/id/sil..."
+
+### Ajanın Önerdiği Plan ve Tespitler
+Ajan, kullanıcının sadece kendi kitaplarını görebilmesi için `Kitap` modeli ile `User` modeli arasında bir One-to-Many (Bire-Çok) ilişkisi kurulması gerektiğini tespit etti. Bu doğrultuda `models.py` üzerinde `user_id` yabancı anahtarını (ForeignKey) planına dahil etti.
+
+### Plan'da Sorguladıklarım / Ajanın Müdahalesi
+SQLite veritabanı, içerisinde veri olan bir tabloya sonradan `ForeignKey` eklenmesine doğrudan izin vermez. Ajan bu teknik kısıtlamayı öngörerek `app/__init__.py` içinde Flask-Migrate yapılandırmasına `render_as_batch=True` (batch mode) ayarını ekledi ve veritabanı migrasyonunu hatasız tamamladı.
+
+### Karşılaştığım Hatalar ve Çözümler
+Bu oturumda projeyi çok daha gerçekçi kılan iki önemli hata ayıklama (debugging) süreci yaşadım:
+1. **ImportError (url_prefix):** Sunucuyu başlatırken ajan kaynaklı bir halüsinasyon sonucu `app/main/routes.py` dosyasında `url_prefix`'in Flask'tan import edilmeye çalışıldığını ve uygulamanın çöktüğünü fark ettim. Dosyaya girip bu hatalı import komutunu manuel olarak silerek sorunu çözdüm.
+2. **500 Internal Server Error (email_validator):** Yeni bir kullanıcı kaydı açarken 500 hatası aldım. Terminaldeki hata loglarını (Traceback) okuduğumda sorunun kodlarda değil, eksik bir kütüphanede olduğunu gördüm (`ModuleNotFoundError: No module named 'email_validator'`). Terminalden `pip install email-validator` komutuyla paketi kurup, `pip freeze > requirements.txt` ile proje gereksinimlerini güncelleyerek hatayı tamamen ortadan kaldırdım.
+
+### Bu Oturumdan Öğrendiğim
+Hata mesajlarını (Traceback) okumanın ve sorunun kök nedenini bulmanın ne kadar kritik olduğunu gördüm. Ayrıca SQLAlchemy'de veritabanı ilişkilerinin mantığını ve Python kütüphane bağımlılıklarının (`requirements.txt`) nasıl yönetildiğini pratik etmiş oldum.
+
+### Sonraki Oturum İçin Notlar
+Ana sayfa arayüzünde oluşturduğumuz "İncele" butonu şu an sadece görsel bir yer tutucu olarak duruyor. Bir sonraki oturumda bu butonu aktifleştirerek, eklenen kitaplara puan ve yorum (inceleme) yazılabilecek detay sayfasını inşa edeceğiz.
