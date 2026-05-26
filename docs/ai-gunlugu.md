@@ -153,3 +153,33 @@ Hata mesajlarını (Traceback) okumanın ve sorunun kök nedenini bulmanın ne k
 
 ### Sonraki Oturum İçin Notlar
 Ana sayfa arayüzünde oluşturduğumuz "İncele" butonu şu an sadece görsel bir yer tutucu olarak duruyor. Bir sonraki oturumda bu butonu aktifleştirerek, eklenen kitaplara puan ve yorum (inceleme) yazılabilecek detay sayfasını inşa edeceğiz.
+
+## Oturum 6 - 26 Mayıs 2026
+
+### Hedef
+Projenin temel CRUD (Ekle/Sil/Listele) işlemlerini tamamladıktan sonra, uygulamayı kişisel bir arşivden çıkarıp "sosyal bir etkileşim platformuna" dönüştürecek olan "İnceleme ve Puanlama" modülünü geliştirmek. Kullanıcıların detay sayfalarında 1-5 arası puanlama yapabilmesi, metin tabanlı inceleme yazabilmesi ve önceki değerlendirmeleri görebileceği dinamik bir yapı inşa etmek.
+
+### Kullandığım Mod ve Model
+Editör: Antigravity
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar ve Geliştirme Süreci
+Bu oturumu tek bir adımla değil, "İteratif Geliştirme" (Iterative Development) mantığıyla iki aşamada gerçekleştirdim:
+1. **Çekirdek Yapının Kurulumu:** İlk promptumda, ana sayfadaki "İncele" butonunun `/kitap/<int:id>` dinamik rotasına bağlanmasını, `IncelemeForm` oluşturulmasını ve verilerin `current_user.id` ile eşleştirilerek veritabanına kaydedilmesini istedim.
+2. **Kullanıcı Kabul Testi (UAT) ve Revizyon:** Sistemi canlı olarak test ettikten sonra UX (Kullanıcı Deneyimi) ve mantıksal (Business Logic) eksikler tespit ettim. İkinci promptumda, puanların sadece rakam olarak değil Jinja2 döngüleriyle "Yıldız (★/☆)" formatında render edilmesini ve farklı kullanıcıların aynı kitaba yaptığı yorumların birleşmesi için SQLAlchemy `JOIN` sorgusu yazılmasını talep ettim.
+
+### Ajanın Önerdiği Plan ve Tespitler
+Ajan, güvenlik zafiyeti yaratmamak adına formdan `user_id` almak yerine doğrudan Flask-Login'in `current_user` objesini kullanmayı planladı. Ayrıca, farklı hesapların aynı isimle eklediği kitapların yorumlarını ortak bir havuzda toplamak için mimariyi bozmadan sadece ekrana veri yansıtırken `Inceleme.query.join(Kitap).filter(Kitap.baslik == kitap.baslik, Kitap.yazar == kitap.yazar).all()` şeklinde gelişmiş bir filtreleme mekanizması sundu.
+
+### Plan'da Sorguladıklarım ve Mimari Kararlar
+İlk etapta ajan, veritabanı yapımız gereği yorumları sadece o an tıklanan spesifik `kitap_id` değerine göre çekiyordu. Bu durum, A kullanıcısının "Suç ve Ceza" kitabına yaptığı yorumun, B kullanıcısının kütüphanesindeki "Suç ve Ceza" kitabında görünmemesine (izole edilmesine) yol açıyordu. Bu senaryonun projenin sosyal ruhuna aykırı olduğunu fark ederek inisiyatif aldım. Veritabanındaki `User-Kitap` (One-to-Many) ilişkisini bozmadan, sadece sorgu katmanında (Query Level) kitap isimlerini eşleştirerek ortak bir yorum havuzu oluşturma kararı aldım ve ajana bu mantığı dikte ettim.
+
+### Karşılaştığım Hatalar ve Çözümler
+Uygulama çökmesine neden olan bir syntax (sözdizimi) hatasıyla karşılaşmadım. Ancak yukarıda bahsettiğim "İzole Yorumlar" durumu tam anlamıyla bir Mantıksal Hata (Logical Bug) idi. Kod çalışıyor olmasına rağmen istenen iş kurallarına (Business Requirements) uymuyordu. Çözüm olarak SQLAlchemy `JOIN` yapısını kullanarak bu mimari eksikliği giderdim. Ayrıca görsel bir eksiklik olan düz rakam gösterimini, Jinja2 şablon motorunun gücünü kullanarak şık bir yıldızlama algoritmasına dönüştürdüm.
+
+### Bu Oturumdan Öğrendiğim
+1. **Dinamik Yönlendirme:** Flask'ta `<int:id>` yapısıyla dinamik URL'lerin nasıl oluşturulduğunu ve bu parametrelerin `routes.py` içerisinde nasıl yakalandığını kavradım.
+2. **Jinja2 Mantıksal Operatörleri:** HTML şablonları içerisinde sadece değişken yazdırmayı değil, `{% for %}` ve `{% if %}` gibi yapıları kullanarak arayüzde algoritmik işlemler (yıldız sayısını hesaplama) yapabilmeyi öğrendim.
+3. **İleri Seviye Veritabanı Sorguları:** Birbirinden farklı kayıtları, içeriklerindeki belirli sütunlara (başlık ve yazar) göre eşleştirip ilişkisel (`JOIN`) veritabanı sorgularının nasıl yazılacağını pratik etmiş oldum. Gerçek dünya senaryolarında yazılım testlerinin (UAT) kod yazmak kadar önemli olduğunu deneyimledim.
