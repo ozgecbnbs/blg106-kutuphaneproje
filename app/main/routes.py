@@ -3,8 +3,8 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
 from app.main import main
-from app.main.forms import KitapForm
-from app.models import Kitap
+from app.main.forms import KitapForm, IncelemeForm
+from app.models import Kitap, Inceleme
 
 @main.route('/')
 @login_required
@@ -29,6 +29,32 @@ def kitap_ekle():
         flash('Kitap başarıyla eklendi.', 'success')
         return redirect(url_for('main.index'))
     return render_template('main/kitap_ekle.html', form=form)
+
+@main.route('/kitap/<int:id>', methods=['GET', 'POST'])
+@login_required
+def kitap_detay(id):
+    kitap = Kitap.query.get_or_404(id)
+    form = IncelemeForm()
+    
+    if form.validate_on_submit():
+        yeni_inceleme = Inceleme(
+            icerik=form.icerik.data,
+            puan=int(form.puan.data),
+            user_id=current_user.id,
+            kitap_id=kitap.id
+        )
+        db.session.add(yeni_inceleme)
+        db.session.commit()
+        flash('İncelemeniz başarıyla eklendi.', 'success')
+        return redirect(url_for('main.kitap_detay', id=kitap.id))
+        
+    # Ortak yorum mantığı: Aynı başlık ve yazara sahip tüm kitapların yorumları
+    ortak_incelemeler = Inceleme.query.join(Kitap).filter(
+        Kitap.baslik == kitap.baslik,
+        Kitap.yazar == kitap.yazar
+    ).order_by(Inceleme.olusturulma_tarihi.desc()).all()
+        
+    return render_template('main/kitap_detay.html', kitap=kitap, form=form, ortak_incelemeler=ortak_incelemeler)
 
 @main.route('/kitap/<int:id>/sil', methods=['POST'])
 @login_required
