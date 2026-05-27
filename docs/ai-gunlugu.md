@@ -183,3 +183,32 @@ Uygulama çökmesine neden olan bir syntax (sözdizimi) hatasıyla karşılaşma
 1. **Dinamik Yönlendirme:** Flask'ta `<int:id>` yapısıyla dinamik URL'lerin nasıl oluşturulduğunu ve bu parametrelerin `routes.py` içerisinde nasıl yakalandığını kavradım.
 2. **Jinja2 Mantıksal Operatörleri:** HTML şablonları içerisinde sadece değişken yazdırmayı değil, `{% for %}` ve `{% if %}` gibi yapıları kullanarak arayüzde algoritmik işlemler (yıldız sayısını hesaplama) yapabilmeyi öğrendim.
 3. **İleri Seviye Veritabanı Sorguları:** Birbirinden farklı kayıtları, içeriklerindeki belirli sütunlara (başlık ve yazar) göre eşleştirip ilişkisel (`JOIN`) veritabanı sorgularının nasıl yazılacağını pratik etmiş oldum. Gerçek dünya senaryolarında yazılım testlerinin (UAT) kod yazmak kadar önemli olduğunu deneyimledim.
+
+## Oturum 7 - 27 Mayıs 2026
+
+### Hedef
+Projenin "Minimum Viable Product" (MVP - Asgari Çalışan Ürün) aşamasından çıkarılarak, kullanıcı deneyimini (UX) merkeze alan, kurumsal bir kimliğe sahip "Production" (Canlı Ortam) seviyesine taşınması. Bu kapsamda; uygulamanın isminin "Bibliyofil" olarak markalaştırılması, istatistiksel veri toplulaştırma (Data Aggregation) işlemlerinin entegrasyonu, dinamik bir Kullanıcı Kontrol Paneli (Dashboard) inşası ve **arayüzün kendi inisiyatifimle gereksiz verilerden (e-posta vb.) arındırılarak minimalist prensiplerle rafine edilmesi.**
+
+### Kullandığım Mod ve Model
+Editör: Antigravity
+Mod: Plan
+Model: Gemini 3 Pro
+Görünüm: Manager
+
+### Verdiğim Promptlar ve İteratif Geliştirme Süreci
+Bu oturumu, çevik yazılım geliştirme (Agile) prensiplerine uygun olarak iki aşamada gerçekleştirdim:
+1. **Kapsamlı Cila ve Markalama:** İlk promptumda uygulamanın her yerindeki başlıkların "Bibliyofil" olarak güncellenmesini, `/profil` rotasının açılmasını, otomatik harf avatarı ve istatistik rozetlerinin (badge) olduğu panelin tasarlanmasını istedim.
+2. **UI Sadeleştirmesi ve E-Posta Gizleme:** Sistemi canlı test ettiğimde (UAT), profil sayfasında kullanıcının e-posta adresinin görünmesinin tasarımı kalabalıklaştırdığını tespit ettim. **Kendi inisiyatifimle ikinci bir prompt göndererek, ajana e-posta satırını şablondan (`profil.html`) tamamen kaldırtmasını emrettim.**
+
+### Plan'da Sorguladıklarım ve Kritik Mimari Kararlar
+1. **E-posta Bilgisinin Kaldırılması (Bilgi Mimarisi Kararı):** Ajanın tasarıma eklediği e-posta satırını tasarımdan çıkarmam tamamen bilinçli bir "Bilgi Mimarisi" ve "Kullanıcı Deneyimi (UX)" kararıydı. Bir kullanıcı kendi profiline bakarken kendi e-posta adresini görmeye ihtiyaç duymaz; asıl odaklanılması gereken veriler istatistikler ve etkileşim geçmişidir. Bu müdahale ile arayüzdeki görsel gürültüyü (UI Noise) yok ettim ve "Az, çoktur" (Less is more) prensibini uyguladım.
+2. **Harf Avatarı (Initials Avatar) vs. Geleneksel Dosya Yükleme (File Upload):** Klasik bir fotoğraf yükleme sisteminin getireceği teknik borçları (disk alanı, güvenlik riskleri, format zorlukları) analiz ettim. Bu ağır maliyetlere girmek yerine; kullanıcının baş harfini (`current_user.username[0]`) alıp Jinja2 ve CSS ile dinamik olarak renklendiren "Otomatik Harf Avatarı" sistemini kurguladım. Bu karar, veritabanını hiç yormadan estetik bir çözüm sundu.
+3. **Senkronize Refactoring:** Uygulamanın adını değiştirme işleminin sadece `base.html` dosyasını değil; projedeki tüm şablonları ve dokümantasyon dosyalarını (README ve günlükler) kapsayan bir "Global Refactoring" işlemi olmasını sağladım.
+
+### Karşılaştığım Hatalar ve Uygulanan Çözümler
+- Geçmiş yorumların detay sayfasında olduğu gibi profil sayfasında da "Yıldız (★/☆)" formatında gösterilmesi gerekiyordu. Ajanın sunduğu planı inceleyerek, yıldızları basan Jinja2 algoritmasının `profil.html` içerisine doğru taşındığını teyit ettim.
+
+### Bu Oturumdan Öğrendiğim Teknik Kazanımlar
+1. **İnisiyatif Alma ve UX Felsefesi:** Bir yazılımın kalitesini belirleyen şeyin sadece arkada çalışan kodlar olmadığını; e-posta gibi gereksiz verilerin ekrandan gizlenmesi, mikro tasarım kararları ve "minimalizm" olduğunu bizzat deneyimledim.
+2. **Veri Toplulaştırma:** Flask rotalarında, `current_user` objesi üzerinden ilişkilendirilmiş tabloların verilerini (Örn: eklenen kitap sayısı) sayarak istatistik elde etmeyi öğrendim.
+3. **String Manipülasyonu:** Arayüzde doğrudan Jinja2 şablon motorunu kullanarak isimden baş harf almanın ve onu CSS ile görsel bir komponente (Avatar) çevirmenin gücünü keşfettim.
