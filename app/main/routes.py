@@ -69,3 +69,15 @@ def kitap_sil(id):
     db.session.commit()
     flash('Kitap başarıyla silindi.', 'success')
     return redirect(url_for('main.index'))
+
+@main.route('/profil')
+@login_required
+def profil():
+    toplam_kitap = len(current_user.kitaplar)
+    toplam_inceleme = len(current_user.incelemeler)
+    incelemeler = Inceleme.query.filter_by(user_id=current_user.id).order_by(Inceleme.olusturulma_tarihi.desc()).all()
+    
+    return render_template('main/profil.html', 
+                           toplam_kitap=toplam_kitap, 
+                           toplam_inceleme=toplam_inceleme, 
+                           incelemeler=incelemeler)

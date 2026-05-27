@@ -1,4 +1,4 @@
-# Dijital Kütüphane ve Okuma Günlüğü
+# Bibliyofil ve Okuma Günlüğü
 
 Bu proje, kitapseverlerin okudukları kitapları dijital bir ortamda düzenli bir şekilde arşivlemelerine, kişisel okuma günlüklerini tutmalarına ve kitaplar hakkında detaylı incelemeler yazıp puanlama yapmalarına olanak tanıyan web tabanlı bir kütüphane ve inceleme yönetim sistemidir. 
 

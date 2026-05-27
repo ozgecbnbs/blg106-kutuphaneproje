@@ -1,6 +1,6 @@
 ## Oturum 1 - 21 Mayıs 2026
 ### Hedef
-Bu oturumda, Dijital Kütüphane uygulaması için Flask 3.x altyapısını ve klasör iskeletini kurmayı hedefledim. Ayrıca sanal ortamı ayarlayıp versiyon kontrol (Git) altyapısını oluşturmak önceliğimdi.
+Bu oturumda, Bibliyofil uygulaması için Flask 3.x altyapısını ve klasör iskeletini kurmayı hedefledim. Ayrıca sanal ortamı ayarlayıp versiyon kontrol (Git) altyapısını oluşturmak önceliğimdi.
 
 ### Kullandığım Mod ve Model
 Editör: Antigravity
@@ -9,7 +9,7 @@ Model: Gemini 3 Pro
 Görünüm: Manager 
 
 ### Verdiğim Promptlar
-1. "Meslek Yüksek Okulu öğrencisiyim, İnternet Programcılığı dersi için Flask 3.x ile bir web uygulaması geliştireceğim. Konum: Dijital Kütüphane ve Okuma Günlüğü. Hedef: Application factory pattern kullanan, blueprint'lere ayrılmış, temiz bir proje iskeleti kur..." 
+1. "Meslek Yüksek Okulu öğrencisiyim, İnternet Programcılığı dersi için Flask 3.x ile bir web uygulaması geliştireceğim. Konum: Bibliyofil ve Okuma Günlüğü. Hedef: Application factory pattern kullanan, blueprint'lere ayrılmış, temiz bir proje iskeleti kur..." 
 ### Ajanın Önerdiği Plan
 Ajan, app/main ve app/auth blueprint'lerini ve boş __init__.py dosyalarını içeren temiz bir proje klasörü planı sundu. 
 (Ekran görüntüsü: docs/img/oturum-1-plan.png) 
